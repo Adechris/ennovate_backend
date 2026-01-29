@@ -45,7 +45,7 @@ This project is a robust **Wallet & Transaction API** built for the CredPal Back
    ```env
    PORT=5000
    MONGODB_URI=mongodb://localhost:27017/credpal_wallet
-   JWT_SECRET=your_secret_key
+   JWT_SECRET=5a3e7b1c-4f8d-4e9a-9c8b-7d6e5f4a3b2c
    ```
 4. Start the development server:
    ```bash
