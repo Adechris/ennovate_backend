@@ -1,7 +1,7 @@
 {
-  "name": "ennovate-loan-api",
+  "name": "ennovate-app",
   "version": "1.0.0",
-  "description": "Transaction and Wallet Management API with Authentication",
+  "description": "Loan Management API with Authentication",
   "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon src/server.ts",
@@ -11,8 +11,7 @@
     "start": "node dist/server.js"
   },
   "keywords": [
-    "wallet",
-    "transaction",
+    "loan",
     "api",
     "nodejs",
     "typescript"
