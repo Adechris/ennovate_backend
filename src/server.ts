@@ -25,17 +25,16 @@ const startServer = async () => {
         // Start server
         httpServer.listen(PORT, () => {
             console.log(`
-╔═══════════════════════════════════════════════════════════╗
-║                                                           ║
-║   🏦 Loan Application API Server                          ║
-║                                                           ║
-║   📡 Server running on port ${PORT}                          ║
-║   🔌 Socket.IO enabled for real-time notifications        ║
-║   🌍 Environment: ${(process.env.NODE_ENV || 'development').padEnd(27)}║
-║   📚 API Base: http://localhost:${PORT}/api                  ║
-║   ❤️  Health: http://localhost:${PORT}/health                ║
-║                                                           ║
-╚═══════════════════════════════════════════════════════════╝
+
+   🏦 Loan Application API Server                          
+                                                           
+   📡 Server running on port ${PORT}                          
+   🔌 Socket.IO enabled for real-time notifications        
+   🌍 Environment: ${(process.env.NODE_ENV || 'development').padEnd(27)}║
+   📚 API Base: http://localhost:${PORT}/api                  
+   ❤️  Health: http://localhost:${PORT}/health                
+                                                           
+
       `);
         });
     } catch (error) {
