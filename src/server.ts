@@ -1,46 +1,72 @@
-import express from 'express';
 import dotenv from 'dotenv';
-import cors from 'cors';
-import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
-import connectDB from './config/db';
-import authRoutes from './routes/authRoutes';
-import transactionRoutes from './routes/transactionRoutes';
-import walletRoutes from './routes/walletRoutes';
 
+// Load environment variables first
 dotenv.config();
 
-connectDB();
-
-const app = express();
-
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,  
-    max: 100, 
-    standardHeaders: true, 
-    legacyHeaders: false, 
-    message: 'Too many requests , try again after 15 minutes'
-});
-
-app.use(limiter);
-app.use(helmet());
-app.use(cors(
-    {
-        origin: 'http://localhost:5173'
-    }
-));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-app.use('/api/auth', authRoutes);
-app.use('/api/transactions', transactionRoutes);
-app.use('/api/wallet', walletRoutes);
-app.get('/', (req, res) => {
-    res.send('API is running...');
-});
+import http from 'http';
+import app from './app';
+import connectDB from './config/database';
+import { socketService } from './shared/services/socket.service';
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// Connect to database and start server
+const startServer = async () => {
+    try {
+        // Connect to MongoDB
+        await connectDB();
+
+        // Create HTTP server
+        const httpServer = http.createServer(app);
+
+        // Initialize Socket.IO
+        socketService.initialize(httpServer);
+
+        // Start server
+        httpServer.listen(PORT, () => {
+            console.log(`
+╔═══════════════════════════════════════════════════════════╗
+║                                                           ║
+║   🏦 Loan Application API Server                          ║
+║                                                           ║
+║   📡 Server running on port ${PORT}                          ║
+║   🔌 Socket.IO enabled for real-time notifications        ║
+║   🌍 Environment: ${(process.env.NODE_ENV || 'development').padEnd(27)}║
+║   📚 API Base: http://localhost:${PORT}/api                  ║
+║   ❤️  Health: http://localhost:${PORT}/health                ║
+║                                                           ║
+╚═══════════════════════════════════════════════════════════╝
+      `);
+        });
+    } catch (error) {
+        console.error('❌ Failed to start server:', error);
+        process.exit(1);
+    }
+};
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason: Error) => {
+    console.error('❌ Unhandled Rejection:', reason.message);
+    console.error(reason.stack);
+    process.exit(1);
 });
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error: Error) => {
+    console.error('❌ Uncaught Exception:', error.message);
+    console.error(error.stack);
+    process.exit(1);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+    console.log('👋 SIGTERM received. Shutting down gracefully...');
+    process.exit(0);
+});
+
+process.on('SIGINT', () => {
+    console.log('👋 SIGINT received. Shutting down gracefully...');
+    process.exit(0);
+});
+
+startServer();
