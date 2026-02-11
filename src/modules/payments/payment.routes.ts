@@ -8,10 +8,37 @@ import { uploadReceipt, validateFileContent } from '../../shared/middleware/uplo
 
 const router = Router();
 
+/**
+ * @swagger
+ * tags:
+ *   name: Payments
+ *   description: Repayments and payment history
+ */
+
 // All routes require authentication
 router.use(authenticate);
 
-// Get user's all payments
+/**
+ * @swagger
+ * /api/payments:
+ *   get:
+ *     summary: Get user's payment history
+ *     tags: [Payments]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Payment history retrieved
+ */
 router.get(
     '/',
     [
@@ -22,7 +49,35 @@ router.get(
     paymentController.getMyPayments
 );
 
-// Submit manual repayment
+/**
+ * @swagger
+ * /api/payments/manual:
+ *   post:
+ *     summary: Submit manual repayment information
+ *     tags: [Payments]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - loanId
+ *               - amount
+ *               - proofOfPayment
+ *             properties:
+ *               loanId:
+ *                 type: string
+ *               amount:
+ *                 type: number
+ *               proofOfPayment:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Manual repayment submitted
+ */
 router.post(
     '/manual',
     [
@@ -34,7 +89,37 @@ router.post(
     paymentController.submitManualRepayment
 );
 
-// Submit manual repayment with receipt upload
+/**
+ * @swagger
+ * /api/payments/manual-with-receipt:
+ *   post:
+ *     summary: Submit manual repayment with receipt upload
+ *     tags: [Payments]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               loanId:
+ *                 type: string
+ *               amount:
+ *                 type: number
+ *               receipt:
+ *                 type: string
+ *                 format: binary
+ *               senderBank:
+ *                 type: string
+ *               senderName:
+ *                 type: string
+ *               externalReference:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Manual repayment with receipt submitted
+ */
 router.post(
     '/manual-with-receipt',
     uploadReceipt.single('receipt'),

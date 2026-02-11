@@ -8,10 +8,41 @@ import { validate } from '../../shared/middleware/validate.middleware';
 
 const router = Router();
 
+/**
+ * @swagger
+ * tags:
+ *   name: Notifications
+ *   description: User notifications
+ */
+
 // All routes require authentication
 router.use(authenticate);
 
-// Get user's notifications
+/**
+ * @swagger
+ * /api/notifications:
+ *   get:
+ *     summary: Get user's notifications
+ *     tags: [Notifications]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: unreadOnly
+ *         schema:
+ *           type: boolean
+ *     responses:
+ *       200:
+ *         description: Notifications retrieved
+ */
 router.get(
     '/',
     [
