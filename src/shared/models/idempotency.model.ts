@@ -51,7 +51,6 @@ const idempotencySchema = new Schema<IIdempotencyRecord>(
 
 // TTL index - auto-delete expired records
 idempotencySchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
-idempotencySchema.index({ key: 1 }, { unique: true });
 
 const IdempotencyRecord = mongoose.model<IIdempotencyRecord>(
     'IdempotencyRecord',

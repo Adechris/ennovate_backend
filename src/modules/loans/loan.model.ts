@@ -330,9 +330,7 @@ loanSchema.methods.transitionTo = function (
 // Indexes
 loanSchema.index({ userId: 1, status: 1 });
 loanSchema.index({ status: 1 });
-loanSchema.index({ applicationNumber: 1 });
 loanSchema.index({ createdAt: -1 });
-loanSchema.index({ 'disbursement.disbursementRef': 1 }, { unique: true, sparse: true });
 
 const Loan = mongoose.model<ILoan, ILoanModel>('Loan', loanSchema);
 
