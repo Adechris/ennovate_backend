@@ -76,6 +76,12 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Security Middlewares
 
+// ============ ROOT REDIRECT ============
+
+app.get('/', (req, res) => {
+    res.redirect('/api-docs');
+});
+
 // ============ HEALTH CHECK ============
 
 app.get('/health', (req, res) => {
