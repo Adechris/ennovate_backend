@@ -2,10 +2,11 @@ import mongoose from 'mongoose';
 
 const connectDB = async (): Promise<void> => {
     try {
-        const mongoURI = process.env.MONGODB_URI;
+        // Support multiple common environment variable names for MongoDB (Railway, Atlas, etc.)
+        const mongoURI = process.env.MONGODB_URI || process.env.DATABASE_URL || process.env.MONGODB_URL || process.env.MONGO_URL;
 
         if (!mongoURI && process.env.NODE_ENV === 'production') {
-            throw new Error('MONGODB_URI is not defined in environment variables. This is required for production environments.');
+            throw new Error('No MongoDB connection string found (tried MONGODB_URI, DATABASE_URL, MONGODB_URL, MONGO_URL). Please check your Railway environment variables.');
         }
 
         const uri = mongoURI || 'mongodb://localhost:27017/loan_app';
