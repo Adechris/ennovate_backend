@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 const connectDB = async (): Promise<void> => {
     try {
+        // Safe debug: Log available environment variable keys (NOT values) in production
+        if (process.env.NODE_ENV === 'production') {
+            console.log('📋 Available Environment Variables:', Object.keys(process.env).join(', '));
+        }
+
         // Support multiple common environment variable names for MongoDB (Railway, Atlas, etc.)
         const mongoURI = process.env.MONGODB_URI || process.env.DATABASE_URL || process.env.MONGODB_URL || process.env.MONGO_URL;
 
