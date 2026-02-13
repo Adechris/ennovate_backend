@@ -147,8 +147,6 @@ const paymentSchema = new Schema<IPayment>(
 // Indexes
 paymentSchema.index({ loanId: 1, createdAt: -1 });
 paymentSchema.index({ userId: 1, createdAt: -1 });
-paymentSchema.index({ idempotencyKey: 1 }, { unique: true });
-paymentSchema.index({ reference: 1 }, { unique: true });
 paymentSchema.index({ status: 1 });
 paymentSchema.index({ reconciled: 1, status: 1 });
 
